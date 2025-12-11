@@ -1,24 +1,25 @@
+import { PrismaClient } from "@prisma/client/extension";
 import "dotenv/config";
 import express from "express";
-import { neon } from "@neondatabase/serverless";
 
 const app = express();
 app.use(express.json());
 
-// create Neon SQL client
-const sql = neon(process.env.DATABASE_URL!);
+const prisma = new PrismaClient();
 
-app.get("/api/test", async (req, res) => {
-  try {
-    const rows = await sql`SELECT NOW()`;
-    res.json({ success: true, time: rows[0].now });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "DB error" });
-  }
+// sample API: get all users
+app.get("/api/users", async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
 });
 
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log("Server running on http://localhost:" + PORT);
+// sample API: create a user
+app.post("/api/users", async (req, res) => {
+  const { name } = req.body;
+  const user = await prisma.user.create({
+    data: { name }
+  });
+  res.json(user);
 });
+
+app.listen(3001, () => console.log("Backend running at http://localhost:3001"));
