@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client/extension";
+
+import { PrismaClient } from "@prisma/client";
 import "dotenv/config";
 import express from "express";
 
