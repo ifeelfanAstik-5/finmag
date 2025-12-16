@@ -4,12 +4,11 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_URL")
 }
 
-
-// Need to modify
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
+  id   Int    @id @default(autoincrement())
+  name String
 }
